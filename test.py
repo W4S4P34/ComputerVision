@@ -1,63 +1,57 @@
-print('Importing libraries')
-import struct
+print('Importing numpy')
 import numpy as np
+print('Importing sklearn.neighbors + sklearn.metrics')
 from sklearn import neighbors, metrics
+print('Importing skimage.io')
 from skimage import io
-import matplotlib.pyplot as plt
-import itertools
+print('Importing pickle')
+import pickle
 
-print('Reading test image')
-test_data = io.imread("test.bmp", as_gray=True)
+print('Unpickling the model')
+pfile = open('knn.pickle', 'rb')
+knn = pickle.load(pfile)
+
+# print('Reading MNIST test data')
+# def read_idx(filename):
+#     with open(filename, 'rb') as f:
+#         zero, data_type, dims = struct.unpack('>HBB',f.read(4))
+#         shape = tuple(struct.unpack('>I',f.read(4))[0] for d in range(dims))
+#         # return np.fromstring(f.read(), dtype=np.uint8).reshape(shape)
+#         # Supress deprecation warning: fromstring() --> frombuffer()
+#         return np.frombuffer(f.read(), dtype=np.uint8).reshape(shape)
+# raw_test = read_idx("C:/Users/DELL-7559/Downloads/t10k-images.idx3-ubyte")
+# test_data = np.reshape(raw_test,(10000,28*28))
+# test_label = read_idx("C:/Users/DELL-7559/Downloads/t10k-labels.idx1-ubyte")
+
+test_file = 'test.bmp'
+
+print('Reading', test_file)
+test_data = io.imread(test_file, as_gray=True)
 print('Normalizing image and converting into ndarray')
 test_data *= 255
 test_data -= 255
 test_data = np.abs(test_data)
 test_data = test_data.astype(int)
 test_data = np.reshape(test_data,(1,28*28))
-print(test_data)
+# print(test_data)
 
-#reading dataset func
-def read_idx(filename):
-    with open(filename, 'rb') as f:
-        zero, data_type, dims = struct.unpack('>HBB',f.read(4))
-        shape = tuple(struct.unpack('>I',f.read(4))[0] for d in range(dims))
-        return np.fromstring(f.read(), dtype=np.uint8).reshape(shape)
-
-print('Reading training image')
-raw_train = read_idx("train-images.idx3-ubyte")
-train_data = np.reshape(raw_train,(60000,28*28))
-train_label = read_idx("train-labels.idx1-ubyte")
-
-# raw_test = read_idx("C:/Users/DELL-7559/Downloads/t10k-images.idx3-ubyte")
-# test_data = np.reshape(raw_test,(10000,28*28))
-# test_label = read_idx("C:/Users/DELL-7559/Downloads/t10k-labels.idx1-ubyte")
-
-#train data 2-3-8
-
-print('Classifying all images')
-idx = (train_label == 0) | (train_label == 1) | (train_label == 2) | (train_label == 3) | (train_label == 4) | (train_label == 5) | (train_label == 6) | (train_label == 7) | (train_label == 8) | (train_label == 9)
-X = train_data[idx]
-Y = train_label[idx]
-knn = neighbors.KNeighborsClassifier(n_neighbors = 5).fit(X,Y)
-
-#test data 2-3-8
-
+print('Predicting data')
 # idx = (test_label == 0) | (test_label == 1) | (test_label == 2) | (test_label == 3) | (test_label == 4) | (test_label == 5) | (test_label == 6) | (test_label == 7) | (test_label == 8) | (test_label == 9)
 # x_test = test_data[idx]
 # y_true = test_label[idx]
-print('Predicting data')
+# y_predict = knn.predict(test_data)
+# print(y_predict)
 y_predict = knn.predict(test_data)
 print(y_predict)
 
-#confusion matrix
+# print('Importing matplotlib.pyplot')
+# import matplotlib.pyplot as plt
+# 
+# print('Drawing confusion matrix')
 # def plot_confusion_matrix(cm, classes,
 #                           normalize=False,
 #                           title="Confusion matrix",
 #                           cmap=plt.cm.Blues):
-#     """
-#     This function prints and plots the confusion matrix.
-#     Normalization can be applied by setting `normalize=True`.
-#     """
 #     if normalize:
 #         cm = cm.astype(float) / cm.sum(axis=1)[:, np.newaxis]
 #         print("Normalized confusion matrix")
