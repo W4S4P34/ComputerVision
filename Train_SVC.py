@@ -11,9 +11,9 @@ mndata = MNIST("./MNIST/")
 print("Loading training dataset")
 images_train, labels_train = mndata.load_training()
 
-print("Limiting training dataset")
-images_train = images_train[:1000]
-labels_train = labels_train[:1000]
+# print("Limiting training dataset")
+# images_train = images_train[:1000]
+# labels_train = labels_train[:1000]
 
 print("Configuring SVC")
 model = SVC(C = 5.0,
@@ -22,7 +22,7 @@ model = SVC(C = 5.0,
             shrinking = True,
             probability = False,                # probability estimates = slower fitting
             max_iter = -1,                      # -1 = infinity
-            cache_size = 1000,                  # cache size in MB
+            cache_size = 2048,                  # cache size in MB
             decision_function_shape = 'ovr',    # ovo/ovr
             verbose = True
            )
