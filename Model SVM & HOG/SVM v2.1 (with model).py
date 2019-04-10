@@ -10,7 +10,7 @@ model = load('SVM-HOG ver 3.0.joblib')
 # =============================================================================
 # load file image
 # =============================================================================
-image = cv2.imread("test.bmp")
+image = cv2.imread("C:/Users/DELL-7559/Desktop/1.jpg")
 im_gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
 im_blur = cv2.GaussianBlur(im_gray,(5,5),0)
 im,thre = cv2.threshold(im_blur,90,255,cv2.THRESH_BINARY_INV)
@@ -28,6 +28,7 @@ for i in contours:
     roi = cv2.dilate(roi, (3, 3))
     
     # Calculate the HOG features
+    
     roi_hog_fd = hog(roi, orientations=9, pixels_per_cell=(14, 14), cells_per_block=(1, 1),block_norm="L2")
     nbr = model.predict(np.array([roi_hog_fd], np.float32))
     cv2.putText(image, str(int(nbr[0])), (x, y),cv2.FONT_HERSHEY_DUPLEX, 2, (0, 255, 255), 3)
